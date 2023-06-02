@@ -1,4 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+import loginAvatar from "/src/assets/images/avatar-icon.png";
+
 function Header() {
   let activeStyles = {
     color: "#161616",
@@ -30,6 +32,9 @@ function Header() {
         >
           Vans
         </NavLink>
+        <Link to="login" className="login-link">
+          <img src={loginAvatar} className="login-icon" />
+        </Link>
       </nav>
     </header>
   );

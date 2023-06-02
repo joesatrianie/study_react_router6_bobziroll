@@ -1,5 +1,11 @@
-import React from "react";
-import { useParams, Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLoaderData } from "react-router-dom";
+import { getHostVans } from "../../api";
+import { requireAuth } from "../../utils";
+
+export async function loader({ params }) {
+  await requireAuth();
+  return getHostVans(params.id);
+}
 
 function HostVanDetail() {
   let activeStyles = {
@@ -7,16 +13,17 @@ function HostVanDetail() {
     textDecoration: "underline",
     fontWeight: "bold",
   };
-  const { id } = useParams();
-  const [currentVan, setCurrentVan] = React.useState(null);
-  React.useEffect(() => {
-    fetch(`/api/host/vans/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCurrentVan(data.vans[0]));
-  }, [id]);
-  if (!currentVan) {
-    return <h1>Loading...</h1>;
-  }
+  // const { id } = useParams();
+  // const [currentVan, setCurrentVan] = React.useState(null);
+  const currentVan = useLoaderData()[0];
+  // React.useEffect(() => {
+  //   fetch(`/api/host/vans/${id}`)
+  //     .then((res) => res.json())
+  //     .then((data) => setCurrentVan(data.vans[0]));
+  // }, [id]);
+  // if (!currentVan) {
+  //   return <h1>Loading...</h1>;
+  // }
   return (
     <section>
       <Link to=".." relative="path" className="back-button">
