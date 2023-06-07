@@ -1,5 +1,7 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { loginUser } from "../api";
+
 export function loader({ request }) {
   return new URL(request.url).searchParams.get("message");
 }
@@ -8,10 +10,20 @@ function Login() {
     email: "",
     password: "",
   });
+  const [status, setStatus] = React.useState("idle");
+  const [error, setError] = React.useState(null);
   const message = useLoaderData();
+  const navigate = useNavigate();
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(loginFormData);
+    setStatus("submitting");
+    setError(null);
+    loginUser(loginFormData)
+      .then((data) => navigate("/host", { replace: true }))
+      .catch((err) => setError(err))
+      .finally(() => setStatus("idle"));
+    console.log(error);
   }
 
   function handleChange(e) {
@@ -23,6 +35,7 @@ function Login() {
     <div className="login-container">
       <h1>Sign in to your account</h1>
       {message && <h2 className="red">{message}</h2>}
+      {error && <h2 className="red">{error.message}</h2>}
       <form onSubmit={handleSubmit} className="login-form">
         <input
           name="email"
@@ -38,7 +51,9 @@ function Login() {
           placeholder="password"
           value={loginFormData.password}
         />
-        <button>Log in</button>
+        <button disabled={status === "submitting"}>
+          {status === "submitting" ? "Logging in..." : "Log in"}
+        </button>
       </form>
     </div>
   );

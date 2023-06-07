@@ -1,5 +1,5 @@
 export async function requireAuth() {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   if (!isLoggedIn) {
     window.location.href = "/login?message=You must log in first.";
