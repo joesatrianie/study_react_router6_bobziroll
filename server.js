@@ -85,7 +85,7 @@ createServer({
   routes() {
     this.namespace = "api";
     this.logging = false;
-    // this.timing = 2000;
+    this.timing = 1000;
 
     this.get("/vans", (schema) => {
       // return new Response(400, {}, { error: "Error fetching data" });
@@ -107,11 +107,14 @@ createServer({
       const { email, password } = JSON.parse(request.requestBody);
       const foundUser = schema.users.findBy({ email, password });
       if (!foundUser) {
-        return new Response(
-          401,
-          {},
-          { message: "No user with those credentials found" }
-        );
+        const data = { message: "No user with those credentials found" };
+
+        const response = new Response(data, {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+          statusText: " No user found",
+        });
+        return response;
       }
       foundUser.password = undefined;
       return {

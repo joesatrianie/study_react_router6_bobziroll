@@ -30,14 +30,21 @@ export async function loginUser(creds) {
     method: "post",
     body: JSON.stringify(creds),
   });
-  // console.log(res);
   const data = await res.json();
-  console.log(res);
-  if (!res.ok) {
+  console.log(data);
+
+  // if (!foundUser) {
+  //   return new Response(
+  //     401,
+  //     {},
+  //     { message: "No user with those credentials found" }
+  //   );
+  // }
+
+  if (!data.ok) {
     throw {
-      message: data.message,
-      statusText: res.statusText,
-      status: res.status,
+      statusText: data.statusText,
+      status: data.status,
     };
   }
   return data;

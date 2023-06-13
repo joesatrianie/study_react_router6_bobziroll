@@ -7,6 +7,9 @@ function Header() {
     textDecoration: "underline",
     fontWeight: "bold",
   };
+  function fakeLogOut() {
+    localStorage.removeItem("loggedin");
+  }
 
   return (
     <header>
@@ -35,6 +38,7 @@ function Header() {
         <Link to="login" className="login-link">
           <img src={loginAvatar} className="login-icon" />
         </Link>
+        <button onClick={fakeLogOut}>X</button>
       </nav>
     </header>
   );
